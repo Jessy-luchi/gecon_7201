@@ -1,0 +1,245 @@
+---
+title: |
+  | ECON 7201
+  | Applied Econometrics
+subtitle: "Assignment 1"
+format: 
+  pdf:
+    fig-pos: H
+    include-in-header: 
+      text: |
+        \usepackage{fancyhdr}
+        \fancypagestyle{style2}{
+        \fancyhf{}
+        \fancyhead[R]{Assignment 1}
+        \fancyhead[L]{ECON 3201}
+        \fancyfoot[C]{\thepage}
+        \renewcommand{\headrulewidth}{1pt}
+        }
+        \pagestyle{style2}
+execute: 
+  eval: true
+  echo: true
+---
+
+```{r}
+#| label: setup 
+#| include: FALSE
+
+#install.packages("tikzDevice")
+# Load the tikzDevice library
+library(tikzDevice)
+
+# Set the default graphics device to tikz for the entire document
+knitr::opts_chunk$set(dev = 'tikz', fig.width = 6, fig.height = 4)
+
+set.seed(42)
+```
+
+\vspace{-1in}
+
+## Due Date
+
+**September 18, 2025** at the start of class
+
+## Directions
+
+Answer all questions. Submit both a PDF and Quarto file to the nexus assignment portal.
+
+# 1. Git and GitHub
+
+(a) Create a GitHub repository called **econ_3201** and connect it to RStudio.
+(b) Create a new R project in this newly created directory called **assignment_1**. (Note, you do not have to click "Create git repository" as the directory is contained in a git enabled directory, i.e., **econ_3201**).
+(c) Download the assignment PDF and Quarto file the **assignment_1** folder.
+(d) Commit and push the changes to your **econ_3201** repository on [GitHub.com](GitHub.com).
+
+# 2. LaTeX
+
+LaTeX is useful for writing math equations and presents them in a neat and orderly way. To write in math mode, wrap your text in `$` for inline text use two `$`s for display (i.e., centered on the page). Some very useful functions include:
+
+-   Fractions:`\frac{}{}`, e.g. `$\frac{1}{2}$` gives $\frac{1}{2}$ and `$$\frac{1}{2}$$` gives: $$\frac{1}{2}.$$
+-   Subscripts: `_` gives a subscript, e.g. `$x_1$` gives $x_1$. To include more than one term in the subscript, the items in the subscript must be enclosed by `{}`. E.g. `$x_{1,1}$` gives $x_{1,1}$. (Note that `$x_1,1$` gives $x_1,1$)
+-   Exponents: `^`, e.g. `$x^2$` gives $x^2$. `^` can also be used for superscripts in other math functions, including summations and integrals.
+-   Aligned: `aligned` neatly aligns multiple lines of an equation. Align is useful when writing multiple steps to solving an equation. To use it in Quarto, write `$$\begin{aligned}...\end{aligned}`. The `&` is used to mark the point where the lines should be aligned. Use `\\` at the end of each line E.g.   `$$\begin{aligned}`\
+    `x & = 3 + 5\\`\
+    `& = 8`\
+    `\end{aligned}$$` 
+
+      gives $$\begin{aligned}
+x & = 3 + 5\\
+& = 8
+\end{aligned}$$\`
+
+-   Summation: `\sum` gives the summation sign, i.e. $\sum$. To include subscripts, use `_` and to use superscripts use `^`, e.g. `$\sum_{i=1}^n$` gives $\sum_{i=1}^n$, which reads as the sum of $i$ equals 1 to $n$.
+-   Integral: `\int` gives an integral, i.e. $\int$. To place a lower limit use `_` and to place an upper limit, use `^`, e.g. `$\int_{a}^{b}$` gives $\int_{a}^{b}$.
+-   Greek letters: `$\alpha, \beta, \gamma, \Gamma, \delta, \Delta, \epsilon, \varepsilon, \zeta, \eta,\sigma, \Sigma, \theta, \vartheta, \Theta, \iota, \kappa, \lambda, \Lambda, \mu$` gives $\alpha, \beta, \gamma, \Gamma, \delta, \Delta, \epsilon, \varepsilon, \zeta, \eta, \sigma, \Sigma, \theta, \vartheta, \Theta, \iota, \kappa, \lambda, \Lambda, \mu$. (See https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols )
+-   Accents: `\hat{}`, `\tilde{}`, and `\bar{}`are examples of accents in math mode. E.g. `\hat{Y}`, `\tilde{Y}`, and `\bar{Y}`gives $\hat{Y}$, $\tilde{Y}$, and $\bar{Y}$, respectively.
+-   Text: To include text in your equation, i.e. non italicized text, use `\text{}`, e.g. `$x=2\text{ if } y=1$` gives $x=2\text{ if } y=1$.
+-   Inequalities: Some mathematical expressions may be written as inequalities, rather than equations. For 'less than' and 'greater than', you can just use the symbol on your keyboard, i.e. `<` and `>`, respectively. For $\leq$, use `$\leq$` and for $\geq$, use `$\geq$`. An important note is that after writing a command, put a space after the command before writing the next term, otherwise you may get an error. E.g. To write $a\leq b$, write `$a\leq b$`, not `$a\leqb$`.
+
+ 
+
+Re-write the following equations in LaTeX.
+
+(a) $E(Y)=y_1p_1+...+y_kp_k=\sum^k_{i=1}y_ip_i$
+
+(b) $\sigma_Y = Var(Y) = E [(Y - \mu_y)^2] = \sum^k_{i=1}(y_i-\mu_y)^2p_i$
+
+(c) $\hat{\beta} = \frac{\sum^n_{i=1}(y-y_i)(x-x_i)}{\sum^n_{i=1}(x-x_i)^2}$
+
+(d) $P(a\leq Y \leq b) = \int_{a}^{b} f_Y(y)dy$
+
+(e) $\hat{g}(x) =\frac{\frac{1}{nh} \sum^n_{i=1}y_ik(\frac{x_i-x}{h})}{\frac{1}{nh}\sum^ni=1k(\frac{x_i-x}{h})}$
+
+# 3. R
+
+## 3.1. Assignment
+
+Note: When creating variables based on equation, separate each element in the equation with the appropriate arithmetic symbol. E.g., to compute $x(y-2)$ in R, you would have to type `x*(y-2)`. `x(y-2)`, with not arithmetic symbol between $x$ and the left bracket would result in an error.
+
+(a) In statistics, $n$ is often used to denoted the sample size. Set the number of observations $n=1000$.
+
+
+```{r}
+n<-1000
+```
+
+
+(b) Generate two random variables, $u_1\sim U(0,1)$ and $u_2\sim U(0,1)$ with $n/2=500$ observations. That is, create two variables that follow a uniform distribution between 0 and 1 that each have 500 observations. In R, we can create random uniform variables using the `runif(k,min,max)` function, where `k` is number of observations, `min` is the minimum value, and `max` is the maximum value. The default values for `min` and `max` are 0 and 1, respectively. Type `?runif` into your console to learn more.
+
+
+```{r}
+n/2
+u1<-runif(500, min=0, max=1)
+u2<-runif(500, min=0, max=1)
+```
+
+
+(c) Generate two variables $z_1$ and $z_2$ that take on the following values: $$z_1=\sqrt{-2\ln(u_1)}\times\text{cos}(2\pi u_2)$$ and $$z_1=\sqrt{-2\ln(u_1)}\times\text{sin}(2\pi u_2).$$ In R, $\sqrt{\text{  }}$ is computed using `sqrt()`, $\ln$ is computed using `log()`, $\text{cos}$ is computed using `cos()`, and $\text{sin}$ is computed using `sin()`.
+
+
+```{r}
+z1<-sqrt(-2*log(u1))*cos(2*pi*u2)
+z2<-sqrt(-2*log(u1))*sin(2*pi*u2)
+```
+
+
+(d) Generate a vector $z=[z_1,z_2]$
+
+
+```{r}
+z<-c(z1,z2)
+```
+
+
+(e) Generate two variables $\mu$ (spelled mu) and $\sigma$ (spelled sigma). Set $\mu=5$ and $\sigma=2$.
+
+```{r}
+mu<-5
+sigma<-2
+```
+
+
+(f) Generate a variable $x=\mu+\sigma\times z$
+
+```{r}
+x<-mu+sigma*z
+```
+
+
+(g) Calculate the mean of $x$, using `mean()` and the standard deviation of $x$ using `sd()`.
+
+```{r}
+mean.x<-mean(x)
+sd.x<-sd(x)
+```
+
+
+(h) Use the following code to plot a histogram of $x$ with the normal distribution curve. hist(x, freq = FALSE, ylab = "Density", xlab = "$x$") curve(dnorm(x, mean = mu, sd = sigma), col = "red", lwd = 2, add = TRUE)
+
+```{r}
+#| fig-cap: "Histogram of $x$"
+#| dependson: q1
+#| eval: true
+#| echo: false
+#| label: fig-1
+
+hist(x,
+freq = FALSE,
+ylab = "Density",
+xlab = "$x$")
+curve(dnorm(x, mean = mu, sd = sigma),
+col = "red", lwd = 2, add = TRUE)
+
+
+```
+
+
+## 3.2. Data frames and Indexing
+
+A data frame in R is a table-like data structure used to store data in rows and columns, similar to a spreadsheet or a database table. It is one of the most commonly used structures for storing datasets in R.\
+\
+@tbl-hlth displays the total health expenditure by use of funds in Canada from 1975 to 2022. The data is stored in the `data.frame` called `df`.
+
+```{r}
+#| label: tbl-hlth
+#| eval: true
+#| echo: false
+#| tbl-cap: "Total health expenditure by use of funds, in millions of current dollars, Canada, 1975 to 2022 (Source: CIHI National Health Expenditure Trends)"
+cihi <- read.csv("hlthexp.csv")
+
+df <- data.frame(Year = cihi$Year,
+                 Hospitals = cihi$Hospitals,
+                 Physicians = cihi$Physicians,
+                 "Other Services" = cihi$Other.Institutions,
+                 Dental = cihi$Other.Professionals..Dental.Services,
+                 Vision = cihi$Other.Professionals..Vision.Care.Services,
+                 "Other Professionals" = cihi$Other.Professionals..Other.Services,
+                 check.names = FALSE)
+
+knitr::kable(df, 
+             align = c(rep('c',7)),
+             format.args = list(big.mark = ","))
+```
+
+(a) Determine if there are any missing values for the variable `Hospitals`.
+(b) Add a variable called "Total Other Services" to the data frame `df`, where $$\text{Total Other Services} = \text{Dental}+\text{Vision}+\text{Other Professional}.$$ To add a newly created variable to a data frame use the syntax `dataframe$varname <- expression`.
+(c) Are there any years for which Total Other Professionals
+(d) Another way to add a variable to a data frame is to simply create a new data frame and append the new variable to it. Note: we can use the same data frame name. I.e., `df<-data.frame(df,newvarname = newvar)`. Add the variable "Prescription Drugs" to the `df` data frame using the append method, where presricption drugs is named "Prescribed.Drugs" in the `cihi` data.frame.
+(e) Using a single R command, determine the expenditure on hospitals in 1983.
+(f) Using a singe R command, list the expenditures by year for 2012-2022.
+
+ANSWERS:
+
+df
+
+read.csv("hlthexp.csv")
+
+cihi \<- read.csv("hlthexp.csv")
+
+df \<- data.frame(Year = cihi$Year,
+                 Hospitals = cihi$Hospitals, Physicians = cihi$Physicians,
+                 "Other Services" = cihi$Other.Institutions, Dental = cihi$Other.Professionals..Dental.Services,
+                 Vision = cihi$Other.Professionals..Vision.Care.Services, "Other Professionals" = cihi\$Other.Professionals..Other.Services, check.names = FALSE)
+
+Answer(a) is.na(df\$Hospitals)
+
+Answer(b) df\$TotalOtherServices\<-c("Dental", "Vision" , "Other Professional")
+
+Answer(c)
+
+Answer(d) df\<-data.frame\<-(df="Prescription Drugs"= "Prescription Drugs" ) append(df,"Prescription Drugs"= "Prescribed.Drug")
+
+## 3.3 Other useful R commands.
+
+Load the `mpg` dataset from the `ggplot2` package using `mpg <-ggplot2::mpg`. (Be sure to install the `gglot2` package before you start.)
+
+(a) Subset the data to include only observations from 2008. Search `?subset` in the console. (a) Calculate the maximum and minimum miles per gallon in city limits (`cty`). Seach `?min` in the console.
+(b) Estimate the average miles per gallon within city limits for cars produced in 2008 using the formula $$\text{Average mpg}=\frac{\sum_{i=1}^n \text{cty}_i}{n}.$$ Recall that $n$ is the number of observations. Search `?length` in the console.
+(c) Estimate the average miles per gallon within city limits for cars produced in 2008 using the `mean()` function.
+(d) Create a variable called `compact`, which takes a value of 1 if the vehichle is a compact and 0 otherwise. Search `?ifelse` in the console.
+(e) Estimate the average miles per gallon within city limits for compact cars. (You may use whichever method you prefer).
+(f) Create a simple scatter plot with city mpg (`cty`) on the x-axis and highway mpg (`hwy`) on the y-axis. Search `?plot` and choose "Generic X-Y Plotting".
+    (i) Change the x-axis label using the option `xlab = "City MPG"` and change the y-axis label using the option `ylab = "Highway MPG"`.
+    (ii) Add the caption "City Versus Highway Fuel Efficiency (MPG)"
+    (iii) Cross reference the figure and add the text "Figure 1 shows the fuel efficiency for city driving versus highway driving".
