@@ -1,0 +1,101 @@
+---
+title: |
+  | ECON 7201
+  | Applied Econometrics
+subtitle: "Assignment 2"
+format: 
+  pdf:
+    include-in-header: 
+      text: |
+        \usepackage{fancyhdr}
+        \fancypagestyle{style2}{
+        \fancyhf{}
+        \fancyhead[R]{Assignment 1}
+        \fancyhead[L]{ECON 3201}
+        \fancyfoot[C]{\thepage}
+        \renewcommand{\headrulewidth}{1pt}
+        }
+        \pagestyle{style2}
+execute: 
+  eval: false
+  echo: true
+---
+
+```{r}
+#| label: setup 
+#| include: FALSE
+
+#install.packages("tikzDevice")
+# Load the tikzDevice library
+library(tikzDevice)
+
+# Set the default graphics device to tikz for the entire document
+knitr::opts_chunk$set(dev = 'tikz', fig.width = 6, fig.height = 4)
+
+set.seed(42)
+```
+
+\vspace{-1in}
+
+## Due Date
+
+**Sunday October 5, 2025** at 11:59 PM
+
+## Directions
+
+Answer all questions. Submit both a PDF and Quarto file to the nexus assignment portal.  
+
+# Git and GitHub
+
+1. 
+    (a) Create a new R project in your **econ_3201** directory called **assignment_2**.
+    (b) Download the assignment PDF and Quarto file the **assignment_2** folder.
+    (c) Commit and push the changes to your **econ_3201** repository on [GitHub.com](GitHub.com).
+
+
+# LaTeX
+
+Matrices are created in LaTeX using the `\begin{bmatrix}...\end{bmatrix}` command. To separate entries along the same row, use `&`. To end a line, use `\\`. To make vertical elipses ($\vdots$), use `\vdots`. Practice writing the following matrices and vectors in LaTeX. Write the following matrices in LaTeX.
+
+2.
+    (a) 
+
+    (b) 
+
+# R
+
+3. In this question we compare standard errors based on (incorrect) asymptotic assumptions with those based on alternate (appropriate) estimator (White). Consider one sample drawn from the following data generating process
+(DGP) which we will simulate in `R`:
+
+```{r}
+set.seed(123)
+n <- 25
+x <- rnorm(n,mean=0.0,sd=1.0)
+beta0 <- 1
+beta1 <- 0
+## x is irrelevant in this model, the data generating process is as follows:
+dgp <- beta0 + beta1*x
+## The residual is heteroskedastic by construction
+e <- x^2*rnorm(n,mean=0.0,sd=1.0)
+y <- dgp + e
+```
+
+> (a) Compute the OLS estimator of $\beta_2$ and its standard error using the `lm()` command in `R` for the model $y_i=\beta_1+\beta_2 x_i+\epsilon_i$ based on the DGP given above.
+
+> (b) Next, compute the standard error of $\hat\beta_2$ by computing $\hat\sigma^2(X'X)^{-1}$ in `R` using matrix commands, and verify that the two standard error estimates are identical.
+
+> (c) Compute White's heteroskedasticity consistent covariance matrix estimator using matrices in R and report the White estimator of the standard error of $\hat\beta_2$. Compare this with that from 3 (a) above.
+
+&nbsp;
+
+4. Let $\hat{\theta}$ be an estimator for the population parameter $\theta$. $\hat{\theta}$ is said to be unbiased if $E(\hat\theta)=\theta$. That is, if the mean of the sampling distribution of $\hat{\theta}$ is equal to the true population value. \
+\
+Consider the model $$y_i=\beta_0+\beta_1x_{1,i}-\beta_2x_{2,i}+\epsilon_i.$$ Lets provide empirical evidence that the ordinary least squares estimators $\hat\beta_0$, $\hat\beta_1$, and $\hat\beta_2$ are unbiased estimators of $\beta_0$, $\beta_1$, $\beta_2$, respectively, using R.  
+    (a) Set the seed to 1, i.e., `set.seed(1)`.
+    (b) Set the number of observations $n=100$
+    (c) Generate the following model $$y_i=2+3.5x_{1,i}-9.2x_{2,i}+\epsilon_i,$$ where $x_1\sim N(3,6)$, $x_2\sim N(2,4)$, and $\epsilon\sim N(0,100)$. To create a normally distributed variable, use the `rnorm(n, mean, sd)` command in R. 
+    (d) Estimate the model coefficients using the `lm()` command. (Search `?lm()` in the console for more info).
+    (e) Using a `for()` loop, replicate the model above $M=1000$ times and save the coefficient estimates from each iteration. 
+    (f) Using `hist()`, plot the sampling distributions of the coefficient estimates, $\beta_1$ and $\beta_2$. 
+    (g) Add a vertical line to each figure at the mean of the respective variable. Search `?abline()` in your console.
+

@@ -3,3 +3,54 @@ title: "Econ 7201 Lab 3"
 format: pdf
 editor: visual
 ---
+
+# Sep/19/2025 - Lab
+
+## Example
+
+1.  $$
+    y=mx+b
+    $$
+2.  $$
+    \frac{a}{b}
+    $$
+3.  $$
+    x_1
+    $$
+4.  $$
+    x^2
+    $$
+5.  $$
+    \sum^n_{i=1}  
+    $$
+6.  $$
+    \alpha
+    $$
+7.  $$
+    \beta
+    $$
+8.  $$
+    \gamma
+    $$
+
+## R code in Quarto
+
+```{r}
+1+1
+```
+
+```{r}
+y <- c(1,2,3,4)
+y
+
+```
+
+```{r}
+
+z <- seq(from = 1,to = 5,by = 1 )
+mean(z)
+```
+
+##LAB CLASS 9/262025
+
+rn{list

@@ -54,9 +54,9 @@ Answer all questions. Submit both a PDF and Quarto file to the nexus assignment 
 (a) Create a GitHub repository called **econ_3201** and connect it to RStudio.
 (b) Create a new R project in this newly created directory called **assignment_1**. (Note, you do not have to click "Create git repository" as the directory is contained in a git enabled directory, i.e., **econ_3201**).
 (c) Download the assignment PDF and Quarto file the **assignment_1** folder.
-(d) Commit and push the changes to your **econ_3201** repository on [GitHub.com](GitHub.com).
+(d) Commit and push the changes to your **econ_3201** repository on [GitHub.com](www.GitHub.com).
 
-My assignment [here](lclair.ca)
+My assignment [here]()
 
 # 2. LaTeX
 
