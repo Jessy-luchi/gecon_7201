@@ -64,7 +64,6 @@ Matrices are created in LaTeX using the `\begin{bmatrix}...\end{bmatrix}` comman
 
 2.  
 (a)
-$$
 
 $X'X=
 \begin{bmatrix}
