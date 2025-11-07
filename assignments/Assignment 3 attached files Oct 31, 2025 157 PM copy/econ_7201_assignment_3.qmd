@@ -1,0 +1,237 @@
+---
+title: |
+  | ECON 7201
+  | Applied Econometrics
+subtitle: "Assignment 3"
+format: 
+  pdf:
+    include-in-header: 
+      text: |
+        \usepackage{fancyhdr}
+        \fancypagestyle{style2}{
+        \fancyhf{}
+        \fancyhead[R]{Assignment 1}
+        \fancyhead[L]{ECON 3201}
+        \fancyfoot[C]{\thepage}
+        \renewcommand{\headrulewidth}{1pt}
+        }
+        \pagestyle{style2}
+execute: 
+  eval: true
+  echo: true
+---
+
+```{r}
+#| label: setup 
+#| include: FALSE
+
+#install.packages("tikzDevice")
+# Load the tikzDevice library
+library(tikzDevice)
+
+# Set the default graphics device to tikz for the entire document
+knitr::opts_chunk$set(dev = 'tikz', fig.width = 6, fig.height = 4)
+
+set.seed(42)
+```
+
+\vspace{-1in}
+
+## Due Date
+
+**Friday November 7, 2025** at 11:59 PM
+
+## Directions  
+Answer each question clearly and concisely. Write equations using LaTeX where appropriate and explain all assumptions in your own words. Submit both a PDF and Quarto file to the nexus assignment portal.
+ 
+
+# Git and GitHub
+
+1. 
+    (a) Create a new R project in your **econ_3201** directory called **assignment_3**.
+    (b) Download the assignment PDF and Quarto file the **assignment_3** folder.
+    (c) Commit and push the changes to your **econ_3201** repository on [GitHub.com](GitHub.com).
+
+
+# Conceptual Foundations
+
+1. (**5 pts**) Define the *potential outcomes framework*. Clearly explain what is meant by $Y_i(1)$, $Y_i(0)$, and $D_i$.
+
+The Potential Outcome Framework is a statistical and theoretical structure used to define the causal effect of a treatment. It is based on the idea that each individual has two potential outcomes:.
+
+
+$$ 
+Y_i=
+\begin{cases}
+Y_i(1), & \text{if } D_i = 1 \\
+Y_i(0), & \text{if } D_i = 0
+\end{cases}
+$$
+Where $Y_i(1)$ is the outcome if the individual receives the treatment, and $Y_i(0)$ is the outcome if the individual does not receive the treatment.
+
+$D_i$ is a binary treatment indicator, where $D_i = 1$ if the individual is treated and $D_i = 0$, if the individual is not trteated.
+
+The observed outcome can be written as $Y_i= Y0i + ( Y1i - Y0i) D_i$, we also cannot observe both potential outcomes for the same individual,only one.
+
+
+2. (**5 pts**) State and explain the **Stable Unit Treatment Value Assumption (SUTVA)**. Why is this assumption critical for causal inference?
+
+The Stable Unit Treatment Value Assumption (SUTVA) implies that the treatment received by one individual does not affect the outcomes of others, and that the treatment itself is consistent and well-defined for all treated individuals.
+
+The SUTVA assumptions is stated below:
+
+No interference between units:
+Each individual’s potential outcomes depend only on their own treatment status. For example, the outcome of person i should not be influenced by whether person j received the treatment.
+
+Consistency:
+The treatment assigned must represent the same intervention for all treated individuals — that is, the treatment level is consistent, clearly defined, and does not vary in unobserved ways.
+
+This assumption is critical because it ensures that the potential outcomes $Y_i1$ and $Y_i0$ are well-defined and comparable across individuals. Without SUTVA, it becomes impossible to isolate the causal effect of the treatment, since observed differences in outcomes might reflect interference between individuals or inconsistencies in the treatment itself.
+
+3. (**5 pts**) What is the **Conditional Independence Assumption (CIA)**?  Write it formally and explain its meaning in words.  
+
+According to the Conditional Independence Assumption (CIA),after accounting for the observed characteristics $X_i$,the process determining who receives treatment is independent of the potential outcomes. As a result, selection bias disappears.
+
+Formally it can be written as: $(Y0_i,Y1_i )\perp C_i | X_i$
+
+This expression means that, conditional on $X_i$,the treatment assignment $C_i$is statistically independent of the potential outcomes of both $Y_i(1)$ and $Y_i(0)$.
+
+4. (**5 pts**) Describe the **Overlap (Common Support)** condition and its practical importance.
+
+The condition requires that every individual has a positive probability of receiving either the treatment or not being treated 
+  $0 < P ( D_i = 1 | X_i ) < 1$
+
+
+5. (**5 pts**) Explain why the **Average Treatment Effect on the Treated (ATT)** may differ from the **Average Treatment Effect (ATE)**.
+
+Average Treatment Effect on the Treated(ATT):This measures the average treatment effect among individuals who actually received the treatment, that is, for those with $(D_i =1)$.It can be expressed as:$ATT = E[Y_i(1) - Y_i(0) | Di = 1 ]$
+
+Average Treatment Effect(ATE) : This measures the average treatment effect for the entire population including both treated and untreated individuals.It can be expressed as $ATE = E[ Y_i(1)] - Y_i(0)]$
+
+
+# Identifying Causal Effects (25 points)
+
+1. (**5 pts**) Suppose treatment $ D_i $ is assigned completely at random. Show that  
+$$
+E[Y_i(1)|D_i=1] - E[Y_i(0)|D_i=0] = ATE
+$$
+Explain why randomization justifies this equality.
+
+2. (**10 pts**) Suppose treatment depends on observed covariates $ X_i $, such that  
+$$
+(Y_i(1), Y_i(0)) \perp D_i \mid X_i
+$$
+Derive an expression for $ATE$ using the **law of iterated expectations**, and interpret it.
+
+3. (**10 pts**) Explain how *selection bias* arises if the CIA fails. Use the decomposition:
+$$
+E[Y_i|D_i=1] - E[Y_i|D_i=0] = ATE + \text{Selection Bias}.
+$$
+
+# Applied Exercise in R (30 points)
+
+Use R to simulate data, estimate treatment effects, and interpret your results. Include all R code and output.
+
+
+```{r}
+#| echo: true
+set.seed(123)
+
+n <- 1000
+X <- rnorm(n)
+D <- ifelse(X + rnorm(n) > 0, 1, 0)
+Y0 <- 2 + 0.5 * X + rnorm(n)
+Y1 <- Y0 + 3 + 0.5 * X
+Y <- ifelse(D == 1, Y1, Y0)
+data <- data.frame(Y, D, X)
+
+```
+
+
+1. (**5 pts**) Compute the difference in average outcomes between treated and untreated. Interpret the result in terms of potential bias. 
+
+```{r}
+Treated <- mean(data$Y[data$D == 1])
+Untreated <- mean(data$Y[data$D ==0])
+Naive_Difference <- Treated - Untreated 
+Naive_Difference
+```
+
+Result Interpretation:The give Average Treatment Effect (ATE)
+            $E[Y1 - Y0] = E[(Y0 + 3 + 0.5*X) - Y0] = 3$
+The observed difference in average outcomes between the treated and untreated is approximately 3.7, which is an overestimate of the true ATE.This occurs because treatment assignment depends on X and individuals with higher X values are both more likely to receive treatment and have higher outcomes even without treatment.Therefore, the difference in means captures not only the causal effect of treatment but also the positive selection bias arising from the correlation between $D_i$ and $X_i$
+
+
+2. (**5 pts**)
+    (a) Estimate the treatment effect controlling for (X):
+$$
+Y_i = \alpha + \tau D_i + \beta X_i + \varepsilon_i
+$$
+
+```{r}
+ols <- lm(Y ~ D + X, data = data)
+summary(ols)
+```
+
+    (b) Compare the estimate of (\tau) to the true treatment effect of 3.
+
+The OLS estimate $(\hat{\tau})=2.903$,is very close to the true treatment effect of 3. The coefficient on $D_i$ represents the causal impact of the treatment after accounting for the observed covariate $X_i$. By including $X_i$ in the regression, we control for confounding factors that influence both treatment assignment and outcomes, thereby removing most of the bias present in the naive difference (3.7)
+
+3. (**5 pts**) Propensity Score Matching 
+
+    (a) Estimate treatment effects using matching. Search `?matchIt` in the console 
+
+```{r}
+library('MatchIt')
+Matching_Model<- matchit(D ~ X, data = data, method = "nearest")
+summary(Matching_Model)
+```
+```{r}
+matched_data <- match.data(Matching_Model)
+att_Matching_Model <- with(matched_data, mean(Y[D == 1]) - mean(Y[D == 0 ]))
+att_Matching_Model <- lm(Y~D , data = matched_data)
+summary(att_Matching_Model)
+```
+
+    (b) Compare the matched estimate to OLS and the naïve difference.
+```{r}
+Naive_Difference <- mean(data$Y[data$D == 1]) - mean(data$Y[data$D ==0])
+
+ols <- lm(Y ~ D + X, data = data)
+ols_Estimate <- coef(ols)["D"]
+
+matched_data <- match.data(Matching_Model)
+att_coefficient <- coef(att_Matching_Model)["D"]
+
+Comparison <- c(Naive = Naive_Difference,
+                       OLS = ols_Estimate,
+                       ATT_Matched = att_coefficient)
+
+print(Comparison)
+```
+
+
+
+4. (**5 pts**) Simulate a violation of the Conditional Independence Assumption by introducing an unobserved confounder ( U_i ):
+
+```{r}
+U <- rnorm(n)
+D <- ifelse(X + U + rnorm(n) > 0, 1, 0)
+Y0 <- 2 + 0.5 * X + 0.5 * U + rnorm(n)
+Y1 <- Y0 + 3 + 0.5 * X
+Y <- ifelse(D == 1, Y1, Y0)
+bias_model <- lm(Y ~ D + X, data = data.frame(Y, D, X))
+summary(bias_model)
+```
+
+Visualize and discuss how this unobserved confounder biases the estimated treatment effect.
+
+Because U is unobserved in the regression, OLS can’t control for its influence. As a result, the estimated coefficient on $D = 3.65$ ends up capturing not only the true treatment effect but also part of U effect. This means the OLS estimate is biased upward compared to the true causal effect of 3.If the Conditional Independence Assumption (CIA) is violated due to an unobserved confounder, the OLS estimate won’t reflect the true causal effect.
+
+```{r}
+plot(X, Y, col = ifelse(D==1, "red", "blue"), pch = 16,
+     main = "Outcome vs Covariate with Confounding",
+     xlab = "X", ylab = "Y")
+legend("topleft", legend = c("Treated", "Untreated"),
+       col = c("red", "blue"), pch = 16)
+```
