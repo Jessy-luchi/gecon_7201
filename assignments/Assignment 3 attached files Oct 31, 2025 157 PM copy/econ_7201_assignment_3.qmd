@@ -1,5 +1,7 @@
 ---
-title: |
+title:  |
+  |Name : Oluchi Jessica Onyekwere
+  |Student ID: 3192227
   | ECON 7201
   | Applied Econometrics
 subtitle: "Assignment 3"
@@ -76,7 +78,7 @@ The observed outcome can be written as $Y_i= Y0i + ( Y1i - Y0i) D_i$, we also ca
 
 2. (**5 pts**) State and explain the **Stable Unit Treatment Value Assumption (SUTVA)**. Why is this assumption critical for causal inference?
 
-The Stable Unit Treatment Value Assumption (SUTVA) implies that the treatment received by one individual does not affect the outcomes of others, and that the treatment itself is consistent and well-defined for all treated individuals.
+The Stable Unit Treatment Value Assumption (SUTVA) implies that the treatment received by one individual does not affect the outcomes of others, and that the treatment itself is consistent and well defined for all treated individuals.
 
 The SUTVA assumptions is stated below:
 
@@ -84,29 +86,29 @@ No interference between units:
 Each individual’s potential outcomes depend only on their own treatment status. For example, the outcome of person i should not be influenced by whether person j received the treatment.
 
 Consistency:
-The treatment assigned must represent the same intervention for all treated individuals — that is, the treatment level is consistent, clearly defined, and does not vary in unobserved ways.
+The treatment assigned is the same for all treated individuals, that is there are no hidden variations of the treatment.
 
-This assumption is critical because it ensures that the potential outcomes $Y_i1$ and $Y_i0$ are well-defined and comparable across individuals. Without SUTVA, it becomes impossible to isolate the causal effect of the treatment, since observed differences in outcomes might reflect interference between individuals or inconsistencies in the treatment itself.
+This assumption is critical because it ensures that the potential outcomes $Y_i(1)$ and $Y_i(0)$ are well defined and comparable across individuals. Without SUTVA, it becomes impossible to isolate the causal effect of the treatment, since observed differences in outcomes might reflect interference between individuals or inconsistencies in the treatment itself.
 
 3. (**5 pts**) What is the **Conditional Independence Assumption (CIA)**?  Write it formally and explain its meaning in words.  
 
 According to the Conditional Independence Assumption (CIA),after accounting for the observed characteristics $X_i$,the process determining who receives treatment is independent of the potential outcomes. As a result, selection bias disappears.
 
-Formally it can be written as: $(Y0_i,Y1_i )\perp C_i | X_i$
+Formally it can be written as: $$(Y_i(1),Y_i(0) )\perp C_i | X_i$$
 
 This expression means that, conditional on $X_i$,the treatment assignment $C_i$is statistically independent of the potential outcomes of both $Y_i(1)$ and $Y_i(0)$.
 
 4. (**5 pts**) Describe the **Overlap (Common Support)** condition and its practical importance.
 
 The condition requires that every individual has a positive probability of receiving either the treatment or not being treated 
-  $0 < P ( D_i = 1 | X_i ) < 1$
+  $$0 < P ( D_i = 1 | X_i ) < 1$$
 
 
 5. (**5 pts**) Explain why the **Average Treatment Effect on the Treated (ATT)** may differ from the **Average Treatment Effect (ATE)**.
 
-Average Treatment Effect on the Treated(ATT):This measures the average treatment effect among individuals who actually received the treatment, that is, for those with $(D_i =1)$.It can be expressed as:$ATT = E[Y_i(1) - Y_i(0) | Di = 1 ]$
+Average Treatment Effect on the Treated(ATT):This measures the average treatment effect among individuals who actually received the treatment, that is, for those with $(D_i =1)$.It can be expressed as:$$ATT = E[Y_i(1) - Y_i(0) | Di = 1 ]$$
 
-Average Treatment Effect(ATE) : This measures the average treatment effect for the entire population including both treated and untreated individuals.It can be expressed as $ATE = E[ Y_i(1)] - Y_i(0)]$
+Average Treatment Effect(ATE) : This measures the average treatment effect for the entire population including both treated and untreated individuals.It can be expressed as $$ATE = E[ Y_i(1)] - Y_i(0)]$$
 
 
 # Identifying Causal Effects (25 points)
@@ -117,16 +119,67 @@ E[Y_i(1)|D_i=1] - E[Y_i(0)|D_i=0] = ATE
 $$
 Explain why randomization justifies this equality.
 
+Proof:
+Suppose treatment $D_i$ is assigned completely at random. This implies that treatment assignment is independent of the potential outcomes:
+            $$(Y_i(1),Y_i(0))\perp D_i$$
+
+Because treatment is randomly assigned, the treated and control groups are statistically identical on average. Therefore, conditional expectations equal their unconditional expectations:
+            $$E[Y_i(1)|D_i=1] = E[Y_i(1)] and  E[Y_i(0)|D_i=0] = E[Y_i(0)]$$
+Substituting these into the observed difference gives:
+                  $$E[Y_i(1)] - E[Y_i(0)$$
+
+By definition, the Average Treatment Effect (ATE) is:
+        $$ATE = E[Y_i(1) - Y_i(0) = E[Y_i(1)] - E[Y_i(0)]$$
+
+Therefore: $$E[Y_i(1)|D_i=1] - E[Y_i(0)|D_i =0] = ATE$$
+
+Randomization ensures that treatment assignment $D_i$ is unrelated to potential outcomes$Y_i(1)$ and $Y_i(0)$.As a result, the treated and control groups are statistically equivalent both observed and unobserved characteristics are balanced across groups. Therefore, comparing the average observed outcomes of treated and untreated individuals provides an unbiased estimate of the Average Treatment Effect (ATE), free from selection bias.
+
 2. (**10 pts**) Suppose treatment depends on observed covariates $ X_i $, such that  
 $$
 (Y_i(1), Y_i(0)) \perp D_i \mid X_i
 $$
 Derive an expression for $ATE$ using the **law of iterated expectations**, and interpret it.
 
+Derivation
+
+we start with the definition of the Average Treatment Effect(ATE) $$ATE = E[Y_i(1) - Y_i(0)]$$
+
+Applying the law of Iterated expectations condition on $X_I$: $$ATE= E [ E[Y_i(1) - Y_i(0) | X_i] ]$$
+Split the expectation: $$ATE = E[ E[Y_i(1) | X_i] - E[Y_i(0)| X_i] ]$$
+Using CIA to replace the unobserved counterfactuals with observed outcomes, conditional on $X_i$ :
+For the treated outcome $Y_i(1)$: $$E[Y_i(1) | X_i] = E[Y_i(1) | D_i =, X_i] = E[Y_i | D_i =1]$$
+For the Untreated outcome Y_i(0): $$ E[Y_i(0) | X_i] = E[Y_i(0) |D_i =0, X_i] = E[Y_i | D_i = 0]$$
+Substitute the observed conditional expectations back into the ATE formulas:$$ATE = E_X[E[Y_i | D_i = 1, X_i] - E[Y_i | D_i = 0, Xi]]$$
+The expression dictates that to identify the ATE, one must first remove the selection bias by controlling for $X_i$,and then aggregate these conditional causal effects across the entire range of $X_i$ bserved in the population. The ATE is the weighted average of the conditional treatment effects, with weights determined by the prevalence of each $X_i$ value in the population.
+
+
+
+
+
+
+
 3. (**10 pts**) Explain how *selection bias* arises if the CIA fails. Use the decomposition:
 $$
 E[Y_i|D_i=1] - E[Y_i|D_i=0] = ATE + \text{Selection Bias}.
 $$
+
+The Conditional Independence Assumption (CIA) states that:
+                $$(Y_i(1),Y_i(0) )\perp D_i | X_i$$
+in words the CIA  explains that once we control for the observable characteristics $X_i$,the treatment assignment is a s good as random.
+However when CIA fails,the observed difference in the mean outcomes reflects both the true treatment effect and selection bias, making the estimated treatment effect biased. 
+
+Using the decomposition:
+$$E[Y_i|D_i = 1] - E[Yi|D_i =0] = ATE + Selection Bias$$
+
+where 
+selection Bias $$= E[Y_i(0)|D_i=1] - E[Yi(0)|D_i=0]$$
+
+captures the difference in what the treated and untreated groups would have achieved even without the treatment.
+
+This implies that if people who receive the treatment are inherently different their outcomes would be higher even without the program.As a result the  observed difference $$E[Y|D=1] - E[Y|D=0]$$ overstate the true causal effect.
+
+
 
 # Applied Exercise in R (30 points)
 
