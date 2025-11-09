@@ -54,6 +54,7 @@ Answer each question clearly and concisely. Write equations using LaTeX where ap
     (b) Download the assignment PDF and Quarto file the **assignment_3** folder.
     (c) Commit and push the changes to your **econ_3201** repository on [GitHub.com](GitHub.com).
 
+My assignment [here](https://github.com/Jessy-luchi/gecon_7201)
 
 # Conceptual Foundations
 
